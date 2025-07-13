@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use App\Actions\{{ version }}\Action;
+use App\Support\ActionResult;
+use Illuminate\Support\Facades\DB;
+
+class {{ actionName }}Action extends Action
+{
+    /**
+     * Constructor - Inject dependencies here
+     */
+    public function __construct()
+    {
+        // Inject services here
+        // Example: $this->service = $service;
+    }
+
+    /**
+     * Handle the action logic
+     *
+     * @param array|object $data
+     * @return ActionResult
+     */
+    public function handle($data): ActionResult
+    {
+        // Validate permissions
+        $this->validatePermissions([
+            // 'permission.name'
+        ]);
+
+        // Validate input data
+        $validated = $this->validateData($data, [
+            // 'field' => 'required|string|max:255',
+        ], [
+            // 'field.required' => 'El campo es obligatorio',
+        ]);
+
+        // Business logic with transaction
+        return DB::transaction(function () use ($validated) {
+            // Your business logic here
+            // Example: $result = $this->service->create($validated);
+
+            // Return successful result
+            return $this->successResult(
+                data: null, // Replace with your actual result data
+                message: 'Operación completada exitosamente'
+            );
+        });
+    }
+}
