@@ -16,8 +16,9 @@ class SocialAuthController extends Controller
      */
     public function loginWithSocial(Request $request, LoginWithSocialMediaAction $action)
     {
-        $result = $action->handle($request->all());
-        return response()->json($result->toArray(), $result->getStatusCode());
+        $result = $action->execute(request()->all());
+
+        return $result->toApiResponse();
     }
 
     /**
@@ -25,8 +26,9 @@ class SocialAuthController extends Controller
      */
     public function connectSocialAccount(Request $request, ConnectSocialAccountAction $action)
     {
-        $result = $action->handle($request->all());
-        return response()->json($result->toArray(), $result->getStatusCode());
+        $result = $action->execute($request->all());
+
+        return $result->toApiResponse();
     }
 
     /**

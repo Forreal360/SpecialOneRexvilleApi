@@ -18,7 +18,7 @@ class LoginController extends Controller
 
     public function loginWithEmail(LoginWithEmailAction $action)
     {
-        Log::info('LoginController::loginWithEmail', ['request' => request()->all()]);
+        
         $result = $action->execute(request()->all());
 
         return $result->toApiResponse();
