@@ -29,6 +29,19 @@ class AdminSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        DB::table('admins')->insert([
+            'name' => 'User',
+            'last_name' => 'Admin',
+            'email' => 'joanmilla21@gmail.com',
+            'password' => Hash::make('234975'),
+            'phone_code' => '57',
+            'phone' => '3001234567',
+            'profile_photo' => null,
+            'status' => 'A',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         // Generar 50 usuarios aleatorios
         $faker = Faker::create('es_ES');
         $admins = [];
