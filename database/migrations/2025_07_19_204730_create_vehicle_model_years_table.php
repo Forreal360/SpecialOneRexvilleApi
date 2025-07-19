@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('vehicle_model_years', function (Blueprint $table) {
             $table->id();
+            $table->string('year');
+            $table->string('vpic_id')->nullable();
+            $table->foreignId('model_id')->constrained('vehicle_models')->onDelete('cascade');
             $table->timestamps();
         });
     }

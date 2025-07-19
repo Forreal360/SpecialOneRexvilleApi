@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('vehicle_makes', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('vpic_id')->nullable();
             $table->timestamps();
         });
     }
