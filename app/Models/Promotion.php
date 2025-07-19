@@ -14,7 +14,7 @@ class Promotion extends Model
         'title',
         'start_date',
         'end_date',
-        'image_url',
+        'image_path',
         'redirect_url',
         'status',
     ];

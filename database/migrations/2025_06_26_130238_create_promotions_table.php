@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title'); // Título de la promoción
             $table->datetime('start_date'); // Fecha de inicio
             $table->datetime('end_date'); // Fecha de fin
-            $table->string('image_url')->nullable(); // URL de la imagen
+            $table->string('image_path')->nullable(); // URL de la imagen
             $table->string('redirect_url')->nullable(); // URL de redirección
             $table->enum('status', ['A', 'I'])->default('A'); // A=Activo, I=Inactivo
 

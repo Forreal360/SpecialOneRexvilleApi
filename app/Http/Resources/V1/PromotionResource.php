@@ -19,7 +19,7 @@ class PromotionResource extends JsonResource
             'title' => $this->title,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'image_url' => $this->image_url,
+            'image_url' => $this->image_path,
             'redirect_url' => $this->redirect_url,
             'is_valid' => $this->is_valid,
         ];
