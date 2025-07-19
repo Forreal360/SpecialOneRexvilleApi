@@ -50,12 +50,12 @@ class Client extends Authenticatable
 
     public function vehicles()
     {
-        return $this->hasMany(Vehicle::class);
+        return $this->hasMany(ClientVehicle::class);
     }
 
     public function services()
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(ClientService::class);
     }
 
     /**

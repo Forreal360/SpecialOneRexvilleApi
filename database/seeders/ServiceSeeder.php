@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Client;
-use App\Models\Vehicle;
-use App\Models\Service;
+use App\Models\ClientVehicle;
+use App\Models\ClientService;
 
 class ServiceSeeder extends Seeder
 {
@@ -30,7 +30,7 @@ class ServiceSeeder extends Seeder
         foreach ($client->vehicles as $vehicle) {
             $numServices = rand(0, 10);
             for ($i = 0; $i < $numServices; $i++) {
-                Service::create([
+                ClientService::create([
                     'client_id' => $client->id,
                     'vehicle_id' => $vehicle->id,
                     'date' => now()->subDays(rand(0, 365 * 3))->format('Y-m-d'),

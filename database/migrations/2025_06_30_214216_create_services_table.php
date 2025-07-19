@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('client_services', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('vehicle_id');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->datetime('created_at')->useCurrent();
             $table->datetime('updated_at')->useCurrent();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->foreign('vehicle_id')->references('id')->on('client_vehicles')->onDelete('cascade');
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('client_services');
     }
 };

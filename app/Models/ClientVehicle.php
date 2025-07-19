@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Vehicle extends Model
+class ClientVehicle extends Model
 {
+    protected $table = 'client_vehicles';
+
     protected $fillable = [
-        'user_id',
+        'client_id',
         'year',
         'model',
         'vin',
@@ -24,6 +26,6 @@ class Vehicle extends Model
 
     public function services(): HasMany
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(ClientService::class);
     }
 }

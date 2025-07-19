@@ -62,7 +62,7 @@ class VehicleSeeder extends Seeder
         ];
 
         foreach ($vehicles as $vehicleData) {
-            \App\Models\Vehicle::create($vehicleData);
+            \App\Models\ClientVehicle::create($vehicleData);
         }
 
         $this->command->info('Se han creado 5 vehículos para el cliente: ' . $client->name);

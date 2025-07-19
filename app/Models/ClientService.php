@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Service extends Model
+class ClientService extends Model
 {
 
-    protected $table = 'services';
+    protected $table = 'client_services';
 
     protected $fillable = [
         'client_id',
@@ -24,6 +24,6 @@ class Service extends Model
 
     public function vehicle(): BelongsTo
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(ClientVehicle::class);
     }
 }

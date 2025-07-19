@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\V1;
 
-use \App\Models\Vehicle;
+use \App\Models\ClientVehicle;
 use App\Services\V1\Service;
 
 class VehicleService extends Service
@@ -14,7 +14,7 @@ class VehicleService extends Service
      */
     public function __construct()
     {
-        $this->modelClass = Vehicle::class;
+        $this->modelClass = ClientVehicle::class;
 
         // Configure searchable fields for this service
         $this->searchableFields = [
