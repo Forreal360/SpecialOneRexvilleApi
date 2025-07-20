@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ClientNotificationSeeder::class,
             SocialAccountSeeder::class,
             AdminSeeder::class,
+            VehicleMakesModelsUpdateSeeder::class,
         ]);
     }
 }

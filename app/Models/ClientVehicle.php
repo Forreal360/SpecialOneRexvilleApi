@@ -13,7 +13,8 @@ class ClientVehicle extends Model
     protected $fillable = [
         'client_id',
         'year',
-        'model',
+        'make_id',
+        'model_id',
         'vin',
         'buy_date',
         'insurance',
@@ -22,6 +23,16 @@ class ClientVehicle extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function make(): BelongsTo
+    {
+        return $this->belongsTo(VehicleMake::class);
+    }
+
+    public function model(): BelongsTo
+    {
+        return $this->belongsTo(VehicleModel::class);
     }
 
     public function services(): HasMany

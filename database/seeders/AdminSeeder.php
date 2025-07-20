@@ -46,7 +46,7 @@ class AdminSeeder extends Seeder
         $faker = Faker::create('es_ES');
         $admins = [];
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $admins[] = [
                 'name' => $faker->firstName(),
                 'last_name' => $faker->lastName(),

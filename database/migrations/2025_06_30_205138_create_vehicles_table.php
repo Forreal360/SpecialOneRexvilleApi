@@ -15,12 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->integer('year');
-            $table->string('model');
+            $table->string('make_id');
+            $table->string('model_id');
             $table->string('vin');
             $table->date('buy_date');
             $table->string('insurance');
+            $table->string('image')->nullable();
             $table->datetime('created_at')->useCurrent();
             $table->datetime('updated_at')->useCurrent();
+            $table->enum('status', ['A', 'I', 'T'])->default('A');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
         });
     }

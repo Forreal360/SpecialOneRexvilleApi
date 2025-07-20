@@ -17,8 +17,8 @@ class VehicleMakesModelsUpdateSeeder extends Seeder
      */
     private array $targetMakes = [
         'HYUNDAI',
-        /* 'JEEP',
-        'NISSAN',
+        'JEEP',
+        /*'NISSAN',
         'INFINITI',
         'KIA',
         'TOYOTA',
@@ -48,7 +48,7 @@ class VehicleMakesModelsUpdateSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->years = range(date('Y'), date('Y') - 10);
+        $this->years = range(date('Y'), date('Y') - 2);
 
         $this->command->info('🔄 Iniciando actualización de marcas, modelos y años de vehículos...');
 
