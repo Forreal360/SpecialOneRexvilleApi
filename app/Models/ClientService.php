@@ -13,8 +13,8 @@ class ClientService extends Model
     protected $fillable = [
         'client_id',
         'vehicle_id',
+        'service_id',
         'date',
-        'name',
     ];
 
     public function client(): BelongsTo
@@ -25,5 +25,10 @@ class ClientService extends Model
     public function vehicle(): BelongsTo
     {
         return $this->belongsTo(ClientVehicle::class);
+    }
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(VehicleService::class);
     }
 }

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('vehicle_id');
+            $table->unsignedBigInteger('service_id');
             $table->date('date');
-            $table->string('name');
             $table->datetime('created_at')->useCurrent();
             $table->datetime('updated_at')->useCurrent();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');

@@ -16,14 +16,16 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
+            VehicleMakesModelsUpdateSeeder::class,
             UserSeeder::class,
             PromotionSeeder::class,
+            VehicleServiceSeeder::class,
+            #VehicleDataSeeder::class,
             VehicleSeeder::class,
             ServiceSeeder::class,
             ClientNotificationSeeder::class,
             SocialAccountSeeder::class,
             AdminSeeder::class,
-            VehicleMakesModelsUpdateSeeder::class,
         ]);
     }
 }

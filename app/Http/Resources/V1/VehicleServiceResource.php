@@ -14,7 +14,7 @@ class VehicleServiceResource extends JsonResource
             'client_id' => $this->client_id,
             'vehicle_id' => $this->vehicle_id,
             'date' => $this->date,
-            'name' => $this->name,
+            'name' => $this->service->name,
             'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
             'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
         ];

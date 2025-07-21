@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Client;
 use App\Models\ClientVehicle;
 use App\Models\ClientService;
+use App\Models\VehicleService;
 
 class ServiceSeeder extends Seeder
 {
@@ -34,7 +35,7 @@ class ServiceSeeder extends Seeder
                     'client_id' => $client->id,
                     'vehicle_id' => $vehicle->id,
                     'date' => now()->subDays(rand(0, 365 * 3))->format('Y-m-d'),
-                    'name' => $serviceNames[array_rand($serviceNames)],
+                    'service_id' => VehicleService::inRandomOrder()->first()->id,
                 ]);
             }
         }
