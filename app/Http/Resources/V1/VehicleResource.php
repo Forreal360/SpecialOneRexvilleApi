@@ -23,6 +23,7 @@ class VehicleResource extends JsonResource
             'vin' => $this->vin,
             'buy_date' => $this->buy_date,
             'insurance' => $this->insurance,
+            "photo" => $this->image_path
         ];
     }
 }
