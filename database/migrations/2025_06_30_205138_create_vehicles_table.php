@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('make_id');
             $table->string('model_id');
             $table->string('vin');
-            $table->date('buy_date');
+            $table->datetime('buy_date')->format('Y-m-d');
             $table->string('insurance');
-            $table->string('image')->nullable();
+            $table->string('image_path')->nullable();
             $table->datetime('created_at')->useCurrent();
             $table->datetime('updated_at')->useCurrent();
             $table->enum('status', ['A', 'I', 'T'])->default('A');
