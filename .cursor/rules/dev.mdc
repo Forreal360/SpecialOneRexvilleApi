@@ -1,0 +1,270 @@
+# Pasos para Crear un Servicio API en el Proyecto
+
+## Análisis de la Estructura del Proyecto
+
+El proyecto utiliza un patrón arquitectónico basado en:
+- **Actions**: Clases que manejan la lógica de negocio específica
+- **Services**: Clases que manejan operaciones CRUD y lógica de datos
+- **Controllers**: Controladores que orquestan las Actions y devuelven respuestas
+- **Resources**: Clases para formatear datos de respuesta
+- **ActionResult**: Clase para estandarizar respuestas de API
+
+## Pasos para Crear un Nuevo Servicio API
+
+### 1. Crear el Modelo (si no existe)
+```bash
+php artisan make:model NombreModelo -m
+```
+
+### 2. Crear la Migración (si no existe)
+```bash
+php artisan make:migration create_nombre_modelos_table
+```
+
+### 3. Crear el Service
+```bash
+php artisan make:service NombreService NombreModelo
+```
+**Ejemplo:**
+```bash
+php artisan make:service ProductService Product
+```
+
+### 4. Crear las Actions
+```bash
+php artisan make:action NombreModulo/NombreAction
+```
+**Ejemplos:**
+```bash
+php artisan make:action Product/CreateProductAction
+php artisan make:action Product/UpdateProductAction
+php artisan make:action Product/DeleteProductAction
+php artisan make:action Product/GetProductsAction
+php artisan make:action Product/GetProductAction
+```
+
+### 5. Crear el Controller
+```bash
+php artisan make:controller V1/Api/NombreController
+```
+
+### 6. Crear el Resource (si es necesario)
+```bash
+php artisan make:resource V1/NombreResource
+```
+
+### 7. Configurar las Rutas
+Editar `routes/Api/api_v1.php` y agregar las rutas:
+```php
+// Ejemplo para productos
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{id}', [ProductController::class, 'show']);
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+});
+```
+
+## Estructura de Archivos Típica
+
+### Service (app/Services/V1/ProductService.php)
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Services\V1;
+
+use App\Models\Product;
+use App\Services\V1\Service;
+
+class ProductService extends Service
+{
+    public function __construct()
+    {
+        $this->modelClass = Product::class;
+        $this->searchableFields = ['name', 'description'];
+        $this->per_page = 10;
+    }
+
+    // Métodos específicos del servicio
+    public function getActiveProducts()
+    {
+        return $this->modelClass::where('status', 'A')->get();
+    }
+}
+```
+
+### Action (app/Actions/V1/Product/CreateProductAction.php)
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Actions\V1\Product;
+
+use App\Actions\V1\Action;
+use App\Services\V1\ProductService;
+use App\Http\Resources\V1\ProductResource;
+use App\Support\ActionResult;
+
+class CreateProductAction extends Action
+{
+    public function __construct(
+        private ProductService $productService
+    ) {}
+
+    public function handle($data): ActionResult
+    {
+        $validated = $this->validateData($data, [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        $product = $this->productService->create($validated);
+
+        return $this->successResult(
+            data: new ProductResource($product),
+            message: 'Producto creado exitosamente'
+        );
+    }
+}
+```
+
+### Controller (app/Http/Controllers/V1/Api/ProductController.php)
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Http\Controllers\V1\Api;
+
+use App\Http\Controllers\Controller;
+use App\Actions\V1\Product\CreateProductAction;
+use App\Actions\V1\Product\GetProductsAction;
+use App\Actions\V1\Product\GetProductAction;
+use App\Actions\V1\Product\UpdateProductAction;
+use App\Actions\V1\Product\DeleteProductAction;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
+class ProductController extends Controller
+{
+    public function index(GetProductsAction $action): JsonResponse
+    {
+        $result = $action->execute(request()->all());
+        return $result->toApiResponse();
+    }
+
+    public function show($id, GetProductAction $action): JsonResponse
+    {
+        $result = $action->execute(['id' => $id]);
+        return $result->toApiResponse();
+    }
+
+    public function store(Request $request, CreateProductAction $action): JsonResponse
+    {
+        $result = $action->execute($request->all());
+        return $result->toApiResponse();
+    }
+
+    public function update(Request $request, $id, UpdateProductAction $action): JsonResponse
+    {
+        $data = array_merge($request->all(), ['id' => $id]);
+        $result = $action->execute($data);
+        return $result->toApiResponse();
+    }
+
+    public function destroy($id, DeleteProductAction $action): JsonResponse
+    {
+        $result = $action->execute(['id' => $id]);
+        return $result->toApiResponse();
+    }
+}
+```
+
+### Resource (app/Http/Resources/V1/ProductResource.php)
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Http\Resources\V1;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ProductResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
+    }
+}
+```
+
+## Patrones Importantes
+
+### 1. Manejo de Errores
+- Usar `ValidationErrorException` para errores de validación
+- Usar `ActionResult` para respuestas estandarizadas
+- Implementar logging en Actions cuando sea necesario
+
+### 2. Validación
+- Validar datos en las Actions usando `validateData()`
+- Definir reglas de validación específicas para cada endpoint
+
+### 3. Autenticación
+- Usar middleware `auth:sanctum` para rutas protegidas
+- Acceder al usuario autenticado con `auth()->user()`
+
+### 4. Respuestas
+- Siempre usar `ActionResult` para respuestas consistentes
+- Usar Resources para formatear datos de respuesta
+- Implementar paginación cuando sea necesario
+
+### 5. Logging
+- Usar `Log::info()` para registrar información importante
+- Usar `Log::error()` para errores en Actions
+
+## Comandos Útiles
+
+```bash
+# Crear todo el stack de un módulo
+php artisan make:service NombreService NombreModelo
+php artisan make:action NombreModulo/CreateNombreAction
+php artisan make:action NombreModulo/UpdateNombreAction
+php artisan make:action NombreModulo/DeleteNombreAction
+php artisan make:action NombreModulo/GetNombresAction
+php artisan make:action NombreModulo/GetNombreAction
+php artisan make:controller V1/Api/NombreController
+php artisan make:resource V1/NombreResource
+```
+
+## Testing
+
+### Crear Tests para Actions
+```bash
+php artisan make:test NombreActionTest
+```
+
+### Crear Tests para Controllers
+```bash
+php artisan make:test NombreControllerTest
+```
+
+## Consideraciones de Seguridad
+
+1. **Validación**: Siempre validar datos de entrada
+2. **Autorización**: Verificar permisos cuando sea necesario
+3. **Sanitización**: Limpiar datos antes de guardar
+4. **Rate Limiting**: Implementar límites de tasa si es necesario
+5. **Logging**: Registrar acciones importantes para auditoría
+alwaysApply: true
+---
