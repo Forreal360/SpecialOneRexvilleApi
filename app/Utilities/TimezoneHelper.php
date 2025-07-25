@@ -50,11 +50,7 @@ class TimezoneHelper
     public static function getCommonTimezones(): array
     {
         return [
-            'America/Mexico_City' => 'Ciudad de México (UTC-6)',
-            'America/Tijuana' => 'Tijuana (UTC-8)',
-            'America/Monterrey' => 'Monterrey (UTC-6)',
-            'America/Guadalajara' => 'Guadalajara (UTC-6)',
-            'UTC' => 'UTC (UTC+0)',
+            'America/Puerto_Rico' => 'Puerto Rico (UTC-4)',
         ];
     }
 }
