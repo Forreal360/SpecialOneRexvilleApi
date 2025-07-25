@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ClientNotificationSeeder::class,
             SocialAccountSeeder::class,
             AdminSeeder::class,
+            AppointmentSeeder::class,
         ]);
     }
 }

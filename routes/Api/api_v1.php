@@ -9,6 +9,8 @@ use App\Http\Controllers\V1\Api\PromotionController;
 use App\Http\Controllers\V1\Api\VehicleController;
 use App\Http\Controllers\V1\Api\ServiceController;
 use App\Http\Controllers\V1\Api\ClientNotificationController;
+use App\Http\Controllers\V1\Api\AppointmentController;
+use App\Http\Controllers\V1\Api\TimezoneController;
 
 // Auth routes
 Route::post('/login-with-email', [LoginController::class, 'loginWithEmail']);
@@ -44,6 +46,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications/{notification_id}/mark-as-read', [ClientNotificationController::class, 'markAsRead']);
     Route::put('/notifications/mark-all-as-read', [ClientNotificationController::class, 'markAllAsRead']);
     Route::delete('/notifications/{notification_id}', [ClientNotificationController::class, 'delete']);
+
+    // Appointments routes
+    Route::post('/appointments', [AppointmentController::class, 'store']);
+    Route::get('/appointments', [AppointmentController::class, 'index']);
+
+    // Timezone routes
+    Route::get('/timezones', [TimezoneController::class, 'index']);
 });
 
 
