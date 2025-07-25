@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Api\Auth\LoginController;
 use App\Http\Controllers\V1\Api\Auth\SocialAuthController;
+use App\Http\Controllers\V1\Api\Auth\PasswordResetController;
 use App\Http\Controllers\V1\Api\ClientController;
 use App\Http\Controllers\V1\Api\PromotionController;
 use App\Http\Controllers\V1\Api\VehicleController;
@@ -15,6 +16,11 @@ use App\Http\Controllers\V1\Api\TimezoneController;
 // Auth routes
 Route::post('/login-with-email', [LoginController::class, 'loginWithEmail']);
 Route::post('/login-with-social', [SocialAuthController::class, 'loginWithSocial']);
+
+// Password reset routes (no authentication required)
+Route::post('/password-reset/send-otp', [PasswordResetController::class, 'sendOtp']);
+Route::post('/password-reset/verify-otp', [PasswordResetController::class, 'verifyOtp']);
+Route::post('/password-reset/reset-password', [PasswordResetController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // Auth routes

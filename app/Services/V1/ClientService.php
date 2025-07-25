@@ -134,4 +134,15 @@ class ClientService extends Service
             $currentToken->save();
         }
     }
+
+    /**
+     * Revoke all auth tokens for a client
+     *
+     * @param Client $client
+     * @return void
+     */
+    public function revokeAllTokens(Client $client): void
+    {
+        $client->tokens()->delete();
+    }
 }
