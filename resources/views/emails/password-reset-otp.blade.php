@@ -1,24 +1,35 @@
-<x-mail::message>
-# Recuperación de Contraseña
+@extends('layouts.mails.main')
 
-Hola {{ $clientName }},
+@section('title')
+    Recuperación de Contraseña
+@endsection
 
-Has solicitado recuperar tu contraseña. Tu código de verificación es:
+@section('user_name')
+    {{ $clientName }}
+@endsection
 
-<x-mail::panel>
-<div style="text-align: center; font-size: 32px; font-weight: bold; color: #007bff; letter-spacing: 8px; margin: 20px 0;">
-{{ $otpCode }}
-</div>
-</x-mail::panel>
+@section('message')
+    Has solicitado recuperar tu contraseña. Tu código de verificación es:
+@endsection
 
-**Importante:**
-- Este código expira en {{ $expiresIn }}
-- Solo puedes usarlo una vez
-- No compartas este código con nadie
-- Si no solicitaste este cambio, ignora este mensaje
+@section('content')
+    @component('components.mail.otp-code', [
+        'code' => $otpCode,
+        'expiresIn' => $expiresIn
+    ])
+    @endcomponent
+@endsection
 
-Si tienes problemas, puedes contactar a nuestro equipo de soporte.
-
-Gracias,<br>
-{{ config('app.name') }}
-</x-mail::message>
+@section('additional_info')
+    @component('components.mail.additional-information')
+        @slot('additional_info')
+            <strong>Instrucciones:</strong><br>
+            • Ingresa este código en la aplicación para continuar<br>
+            • Este código expira en {{ $expiresIn }}<br>
+            • Solo puedes usarlo una vez<br>
+            • No compartas este código con nadie<br><br>
+            <strong>¿No solicitaste este cambio?</strong><br>
+            Si no solicitaste restablecer tu contraseña, ignora este mensaje. Tu cuenta permanece segura.
+        @endslot
+    @endcomponent
+@endsection
