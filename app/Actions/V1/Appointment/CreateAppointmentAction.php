@@ -20,14 +20,10 @@ class CreateAppointmentAction extends Action
             'vehicle_id' => 'required|integer|exists:client_vehicles,id',
             'service_id' => 'required|integer|exists:vehicle_services,id',
             'appointment_datetime' => 'required|date|after_or_equal:now',
-            'timezone' => 'required|string|max:50',
             'notes' => 'nullable|string|max:500',
         ]);
 
-        // Validate timezone
-        if (!TimezoneHelper::isValidTimezone($validatedData['timezone'])) {
-            throw new \Exception('El timezone proporcionado no es válido.');
-        }
+        $validatedData['timezone'] = 'America/Puerto_Rico';
 
         // Add client_id from authenticated user
         $validatedData['client_id'] = auth()->user()->id;
