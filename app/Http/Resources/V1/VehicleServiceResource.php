@@ -9,17 +9,9 @@ class VehicleServiceResource extends JsonResource
 
     public function toArray($request)
     {
-        $data = [
+        return [
             'id' => $this->id,
-            'client_id' => $this->client_id,
-            'vehicle_id' => $this->vehicle_id,
-            'date' => $this->date,
-            'name' => $this->service->name,
-            'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
-            'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
+            'name' => $this->name,
         ];
-
-
-        return $data;
     }
 }

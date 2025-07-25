@@ -9,6 +9,7 @@ use App\Support\ActionResult;
 use App\Services\V1\ServiceService;
 use App\Http\Resources\V1\VehicleServiceResource;
 use App\Services\V1\VehicleService;
+use App\Http\Resources\V1\ClientVehicleServiceResource;
 
 class ListVehicleServicesAction extends Action
 {
@@ -33,7 +34,7 @@ class ListVehicleServicesAction extends Action
         $services = $this->serviceService->getVehicleServices((int) $client->id, (int) $vehicleId);
 
         return $this->successResult(
-            data: VehicleServiceResource::collection($services)
+            data: ClientVehicleServiceResource::collection($services)
         );
     }
 }

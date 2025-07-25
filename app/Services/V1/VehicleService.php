@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\V1;
 
-use \App\Models\ClientVehicle;
+use \App\Models\VehicleService as VehicleServiceModel;
 use App\Services\V1\Service;
 
 class VehicleService extends Service
@@ -14,7 +14,7 @@ class VehicleService extends Service
      */
     public function __construct()
     {
-        $this->modelClass = ClientVehicle::class;
+        $this->modelClass = VehicleServiceModel::class;
 
         // Configure searchable fields for this service
         $this->searchableFields = [
@@ -42,6 +42,16 @@ class VehicleService extends Service
         }
 
         return $query->get();
+    }
+
+    /**
+     * Devuelve el catálogo de servicios activos
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getCatalog(): \Illuminate\Support\Collection
+    {
+        return $this->modelClass::where('status', 'A')->get();
     }
 
     /**

@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Services routes
     Route::get('/services', [ServiceController::class, 'index']);
+    Route::get('/services/catalog', [ServiceController::class, 'catalog']);
     Route::get('/vehicles/{vehicle_id}/services', [ServiceController::class, 'byVehicle']);
 
     // Notifications routes
