@@ -5,6 +5,9 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -48,6 +51,8 @@ class Client extends Authenticatable
         'password' => 'hashed',
     ];
 
+
+
     public function vehicles()
     {
         return $this->hasMany(ClientVehicle::class);
@@ -65,4 +70,13 @@ class Client extends Authenticatable
     {
         return $this->hasMany(SocialAccount::class);
     }
+
+    public function profilePhoto(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value == null ? null : Storage::disk('s3')->temporaryUrl($value, Carbon::now()->addMinutes(120)),
+            set: fn ($value) => $value == null ? null : Storage::disk('s3')->put('/clients', $value),
+        );
+    }
+    
 }

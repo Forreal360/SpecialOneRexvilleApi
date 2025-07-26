@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // User routes
     Route::get('/profile', [ClientController::class, 'profile']);
     Route::put('/profile', [ClientController::class, 'update']);
+    Route::post('/profile-photo', [ClientController::class, 'updateProfilePhoto']);
 
     // Promotion routes
     Route::get('/promotions', [PromotionController::class, 'index']);

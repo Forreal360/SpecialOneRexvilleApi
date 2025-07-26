@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('client_password_otp', function (Blueprint $table) {
             $table->id();
-            $table->string('email'); // Email del cliente
+            $table->string('email')->nullable(); // Email del cliente
             $table->string('otp_code', 6); // Código OTP de 6 dígitos
             $table->datetime('expires_at'); // Fecha y hora de expiración
             $table->boolean('is_used')->default(false); // Si el código ya fue usado
@@ -26,8 +26,6 @@ return new class extends Migration
             $table->index(['email', 'otp_code']);
             $table->index('expires_at');
 
-            // Clave foránea para asegurar que el email existe en la tabla clients
-            $table->foreign('email')->references('email')->on('clients')->onDelete('cascade');
         });
     }
 

@@ -50,6 +50,7 @@ class UpdateClientAction extends Action
             'phone_code' => 'sometimes|required|string|max:5',
             'phone' => 'sometimes|required|string|max:15',
             'license_number' => 'sometimes|required|string|max:255',
+            'profile_photo' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  
         ];
 
         $validated = $this->validateData($data, $rules);

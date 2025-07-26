@@ -28,4 +28,11 @@ class ClientController extends Controller
 
         return $result->toApiResponse();
     }
+
+    public function updateProfilePhoto(Request $request, UpdateClientAction $action): JsonResponse
+    {
+        $result = $action->execute($request->all());
+
+        return $result->toApiResponse();
+    }
 }
