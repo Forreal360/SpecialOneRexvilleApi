@@ -8,6 +8,7 @@ El proyecto utiliza un patrón arquitectónico basado en:
 - **Controllers**: Controladores que orquestan las Actions y devuelven respuestas
 - **Resources**: Clases para formatear datos de respuesta
 - **ActionResult**: Clase para estandarizar respuestas de API
+- **Errores en acciones**: es importante que en la accion cuando hay un error, utilizar ValidationErrorException y no utlizar try catch si no es necesario porque ya la clase Action ya tiene un bloque de manejo de errores.
 
 ## Pasos para Crear un Nuevo Servicio API
 

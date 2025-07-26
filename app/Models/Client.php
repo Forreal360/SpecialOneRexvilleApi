@@ -71,6 +71,14 @@ class Client extends Authenticatable
         return $this->hasMany(SocialAccount::class);
     }
 
+    /**
+     * Get the tickets for the client.
+     */
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     public function profilePhoto(): Attribute
     {
         return Attribute::make(
@@ -78,5 +86,5 @@ class Client extends Authenticatable
             set: fn ($value) => $value == null ? null : Storage::disk('s3')->put('/clients', $value),
         );
     }
-    
+
 }
