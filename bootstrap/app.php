@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        
+
         $api_reponse_service = new ActionResult(
             success: false
         );
@@ -46,7 +46,6 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (Exception $e, Request $request) use ($api_reponse_service) {
-            dd($e);
             $response = ActionResult::error(
                 message: trans('validation.500'),
                 statusCode: 500
@@ -56,9 +55,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
 
         $exceptions->render(function (\Throwable $e, Request $request) use ($api_reponse_service) {
-            dd($e);
+
             $response = ActionResult::error(
-                message: trans('validation.500'),
+                message: $e->getTraceAsString(),
                 statusCode: 500
             );
             return $response->toApiResponse();

@@ -13,7 +13,6 @@ use App\Http\Controllers\V1\Api\ClientNotificationController;
 use App\Http\Controllers\V1\Api\AppointmentController;
 use App\Http\Controllers\V1\Api\TimezoneController;
 use App\Http\Controllers\V1\Api\TicketController;
-use App\Http\Controllers\V1\Api\SupportChatController;
 
 // Auth routes
 Route::post('/login-with-email', [LoginController::class, 'loginWithEmail']);
@@ -64,17 +63,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Timezone routes
     Route::get('/timezones', [TimezoneController::class, 'index']);
 
-    // Support Chat / Tickets routes
-    Route::prefix('support')->group(function () {
-        // Tickets
-        Route::get('/tickets', [TicketController::class, 'index']);
-        Route::post('/tickets', [TicketController::class, 'store']);
-        Route::get('/tickets/{id}', [TicketController::class, 'show']);
-        Route::put('/tickets/{id}/status', [TicketController::class, 'updateStatus']);
-
-        // Messages
-        Route::get('/tickets/{ticketId}/messages', [SupportChatController::class, 'getMessages']);
-        Route::post('/tickets/{ticketId}/messages', [SupportChatController::class, 'sendMessage']);
+    // Tickets routes
+    Route::prefix('tickets')->group(function () {
+        Route::get('/', [TicketController::class, 'index']); // Listar tickets del cliente
+        Route::post('/', [TicketController::class, 'store']); // Crear nuevo ticket
+        Route::get('/{id}', [TicketController::class, 'show']); // Obtener ticket específico
+        Route::post('/messages', [TicketController::class, 'storeMessage']); // Enviar mensaje a ticket
     });
 });
 

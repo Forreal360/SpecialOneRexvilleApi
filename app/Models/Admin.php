@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -38,5 +39,13 @@ class Admin extends Authenticatable
     public function assignedTickets(): HasMany
     {
         return $this->hasMany(Ticket::class)->where('status', '!=', 'closed');
+    }
+
+    /**
+     * Get all ticket messages sent by this admin.
+     */
+    public function ticketMessages(): MorphMany
+    {
+        return $this->morphMany(TicketMessage::class, 'fromeable');
     }
 }

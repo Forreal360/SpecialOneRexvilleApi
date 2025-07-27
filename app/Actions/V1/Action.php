@@ -137,7 +137,7 @@ abstract class Action
      * @param mixed $data
      * @return void
      */
-    protected function logError(\Exception $exception, $data): void
+    protected function logError($exception, $data): void
     {
         Log::error('Error in ' . static::class, [
             'error' => $exception->getMessage(),

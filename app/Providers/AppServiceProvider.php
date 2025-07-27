@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use App\Console\Commands\MakeActionCommand;
 use App\Console\Commands\MakeServiceCommand;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Models\Client;
+use App\Models\Admin;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,5 +34,10 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
             $event->extendSocialite('apple', \SocialiteProviders\Apple\Provider::class);
         });
+
+        Relation::morphMap([
+            'client' => Client::class,
+            'admin' => Admin::class,
+        ]);
     }
 }

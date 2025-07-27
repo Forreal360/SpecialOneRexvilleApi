@@ -17,6 +17,8 @@ return new class extends Migration
 
             $table->string('subject');
             $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
+            $table->enum('new_message_from_client', ['Y', 'N'])->default('N');
+            $table->enum('new_message_from_support', ['Y', 'N'])->default('N');
             $table->string('client_id');
 
             $table->timestamps();

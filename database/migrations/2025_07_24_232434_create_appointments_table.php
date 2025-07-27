@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('vehicle_id');
             $table->unsignedBigInteger('service_id');
-            $table->date('appointment_date');
-            $table->time('appointment_time');
+            $table->dateTime('appointment_datetime');
+            $table->string('timezone', 50)->default('UTC');
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();
@@ -26,8 +26,8 @@ return new class extends Migration
             $table->foreign('vehicle_id')->references('id')->on('client_vehicles')->onDelete('cascade');
             $table->foreign('service_id')->references('id')->on('vehicle_services')->onDelete('cascade');
 
-            $table->index(['client_id', 'appointment_date']);
-            $table->index(['appointment_date', 'appointment_time']);
+            $table->index(['client_id', 'appointment_datetime']);
+            $table->index(['appointment_datetime']);
         });
     }
 
