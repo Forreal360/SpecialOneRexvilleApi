@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Appointments routes
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
+    Route::put('/appointments/{appointment_id}/cancel', [AppointmentController::class, 'cancel']);
 
     // Timezone routes
     Route::get('/timezones', [TimezoneController::class, 'index']);

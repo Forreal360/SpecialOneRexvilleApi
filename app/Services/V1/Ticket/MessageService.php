@@ -30,6 +30,7 @@ class MessageService extends Service
 
         $ticket = $this->ticketService->findByIdOrFail($data['ticket_id']);
         $ticket->new_message_from_client = 'Y';
+        $ticket->new_message_from_support = 'N';
         $ticket->save();
 
         return $this->create([

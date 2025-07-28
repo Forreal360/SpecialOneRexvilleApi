@@ -12,8 +12,22 @@ use App\Utilities\TimezoneHelper;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
-class AppointmentService
+class AppointmentService extends Service
 {
+
+    public function __construct()
+    {
+        $this->modelClass = Appointment::class;
+
+        // Configure searchable fields for this service
+        $this->searchableFields = [
+            // 'email',
+            // 'description',
+        ];
+
+        // Configure pagination
+        $this->per_page = 10;
+    }
     /**
      * Create a new appointment
      */
@@ -59,5 +73,31 @@ class AppointmentService
             ->get();
     }
 
+    /**
+     * Cancel an appointment
+     */
+    public function cancelAppointment(int $appointmentId, int $clientId): Appointment
+    {
+        return DB::transaction(function () use ($appointmentId, $clientId) {
+            // Buscar la cita y verificar que pertenece al cliente
+            $appointment = Appointment::where('id', $appointmentId)
+                ->where('client_id', $clientId)
+                ->first();
+
+            if (!$appointment) {
+                throw new \Exception('La cita no existe o no pertenece al cliente autenticado.');
+            }
+
+            // Verificar que la cita no ha sido confirmada
+            if ($appointment->status == 'confirmed' || $appointment->status == 'completed' || $appointment->status == 'cancelled') {
+                throw new \Exception('no se puede cancelar una cita confirmada o completada');
+            }
+
+            // Cancelar la cita
+            $appointment->update(['status' => 'cancelled']);
+
+            return $appointment->fresh(['vehicle', 'service']);
+        });
+    }
 
 }
