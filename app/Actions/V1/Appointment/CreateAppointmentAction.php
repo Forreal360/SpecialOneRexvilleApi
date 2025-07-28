@@ -18,7 +18,7 @@ class CreateAppointmentAction extends Action
     {
         $validatedData = $this->validateData($data, [
             'vehicle_id' => 'required|integer|exists:client_vehicles,id',
-            'service_id' => 'required|integer|exists:vehicle_services,id',
+            'service_ids' => 'required|array|exists:vehicle_services,id',
             'appointment_datetime' => 'required|date|after_or_equal:now',
             'notes' => 'nullable|string|max:500',
         ]);

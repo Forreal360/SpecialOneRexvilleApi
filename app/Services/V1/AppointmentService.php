@@ -39,9 +39,6 @@ class AppointmentService extends Service
                 ->where('client_id', $data['client_id'])
                 ->firstOrFail();
 
-            // Verify that the service exists
-            $service = VehicleService::findOrFail($data['service_id']);
-
             // Validate timezone
             if (!TimezoneHelper::isValidTimezone($data['timezone'])) {
                 throw new \Exception('El timezone proporcionado no es válido.');
@@ -50,15 +47,18 @@ class AppointmentService extends Service
             // Convert datetime to UTC for storage
             $utcDatetime = TimezoneHelper::toUTC($data['appointment_datetime'], $data['timezone']);
 
-            return Appointment::create([
+            $appointment = Appointment::create([
                 'client_id' => $data['client_id'],
                 'vehicle_id' => $data['vehicle_id'],
-                'service_id' => $data['service_id'],
                 'appointment_datetime' => $utcDatetime,
                 'timezone' => $data['timezone'],
                 'status' => 'pending',
                 'notes' => $data['notes'] ?? null,
             ]);
+
+            $appointment->services()->attach($data['service_ids']);
+
+            return $appointment;
         });
     }
 
@@ -67,7 +67,7 @@ class AppointmentService extends Service
      */
     public function getClientAppointments(int $clientId): Collection
     {
-        return Appointment::with(['vehicle', 'service'])
+        return Appointment::with(['vehicle', 'services'])
             ->where('client_id', $clientId)
             ->orderBy('id', 'desc')
             ->get();
@@ -96,7 +96,7 @@ class AppointmentService extends Service
             // Cancelar la cita
             $appointment->update(['status' => 'cancelled']);
 
-            return $appointment->fresh(['vehicle', 'service']);
+            return $appointment->fresh(['vehicle', 'services']);
         });
     }
 

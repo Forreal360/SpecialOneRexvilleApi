@@ -19,7 +19,6 @@ class AppointmentResource extends JsonResource
             'id' => $this->id,
             'client_id' => $this->client_id,
             'vehicle_id' => $this->vehicle_id,
-            'service_id' => $this->service_id,
             'appointment_datetime' => TimezoneHelper::fromUTC($this->appointment_datetime->format('Y-m-d H:i:s'), $this->timezone),
             'timezone' => $this->timezone,
             'status' => $this->status,
@@ -32,10 +31,12 @@ class AppointmentResource extends JsonResource
                 'license_plate' => $this->vehicle->license_plate,
                 'vin' => $this->vehicle->vin,
             ],
-            'service' => [
-                'id' => $this->service->id,
-                'name' => $this->service->name,
-            ],
+            'services' => $this->services->map(function ($service) {
+                return [
+                    'id' => $service->id,
+                    'name' => $service->name,
+                ];
+            }),
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Appointment extends Model
 {
@@ -31,8 +32,8 @@ class Appointment extends Model
         return $this->belongsTo(ClientVehicle::class);
     }
 
-    public function service(): BelongsTo
+    public function services(): BelongsToMany
     {
-        return $this->belongsTo(VehicleService::class);
+        return $this->belongsToMany(VehicleService::class, 'appointment_services', 'appointment_id', 'service_id');
     }
 }

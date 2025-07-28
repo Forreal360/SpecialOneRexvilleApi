@@ -80,6 +80,11 @@ class Client extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
     /**
      * Get all ticket messages sent by this client.
      */

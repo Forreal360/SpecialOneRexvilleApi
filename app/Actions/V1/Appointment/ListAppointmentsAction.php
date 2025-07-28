@@ -17,7 +17,6 @@ class ListAppointmentsAction extends Action
     {
         $client = auth()->user();
         $appointments = $this->appointmentService->getClientAppointments($client->id);
-
         return $this->successResult(
             data: AppointmentResource::collection($appointments),
             message: 'Citas obtenidas exitosamente.',

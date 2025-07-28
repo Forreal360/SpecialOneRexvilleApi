@@ -17,60 +17,22 @@ class AppointmentSeeder extends Seeder
     public function run(): void
     {
         // Get some existing data
-        $clients = Client::take(3)->get();
-        $vehicles = ClientVehicle::take(3)->get();
-        $services = VehicleService::take(3)->get();
+        $clients = Client::all();
+        $services = VehicleService::all();
 
-        if ($clients->isEmpty() || $vehicles->isEmpty() || $services->isEmpty()) {
-            $this->command->info('No hay suficientes datos para crear citas de prueba. Ejecuta primero los seeders de Client, ClientVehicle y VehicleService.');
-            return;
-        }
-
-                $appointments = [];
-
-        // Create appointments only if we have at least one of each required model
-        if ($clients->isNotEmpty() && $vehicles->isNotEmpty() && $services->isNotEmpty()) {
-            $appointments[] = [
-                'client_id' => $clients->first()->id,
-                'vehicle_id' => $vehicles->first()->id,
-                'service_id' => $services->first()->id,
-                'appointment_datetime' => now()->addDays(2)->setTime(9, 0),
-                'timezone' => 'America/Mexico_City',
-                'status' => 'pending',
-                'notes' => 'Cita de mantenimiento regular',
-            ];
-
-            // Add more appointments if we have multiple services
-            if ($services->count() > 1) {
-                $appointments[] = [
-                    'client_id' => $clients->first()->id,
-                    'vehicle_id' => $vehicles->first()->id,
-                    'service_id' => $services->get(1)->id,
-                    'appointment_datetime' => now()->addDays(5)->setTime(14, 30),
-                    'timezone' => 'America/Mexico_City',
-                    'status' => 'confirmed',
-                    'notes' => 'Cambio de aceite y filtros',
-                ];
-            }
-
-            // Add appointment for second client if available
-            if ($clients->count() > 1 && $vehicles->count() > 1 && $services->count() > 2) {
-                $appointments[] = [
-                    'client_id' => $clients->get(1)->id,
-                    'vehicle_id' => $vehicles->get(1)->id,
-                    'service_id' => $services->get(2)->id,
-                    'appointment_datetime' => now()->addDays(1)->setTime(11, 0),
-                    'timezone' => 'America/Mexico_City',
+        foreach ($clients as $client){
+            $vehicles = ClientVehicle::where('client_id', $client->id)->get();
+            foreach ($vehicles as $vehicle){
+                $appointment = Appointment::create([
+                    'client_id' => $client->id,
+                    'vehicle_id' => $vehicle->id,
+                    'appointment_datetime' => now()->addDays(rand(1, 30))->format('Y-m-d H:i:s'),
                     'status' => 'pending',
-                    'notes' => 'Revisión de frenos',
-                ];
+                    'notes' => 'This is a test appointment',
+                ]);
+
+                $appointment->services()->attach($services->random(rand(1, count($services))));
             }
         }
-
-        foreach ($appointments as $appointmentData) {
-            Appointment::create($appointmentData);
-        }
-
-        $this->command->info('Citas de prueba creadas exitosamente.');
     }
 }

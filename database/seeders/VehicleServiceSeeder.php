@@ -22,5 +22,75 @@ class VehicleServiceSeeder extends Seeder
             'name' => 'Tire Rotation',
             'status' => 'A'
         ]);
+
+        VehicleService::create([
+            'name' => 'Brake Inspection',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Engine Tune-Up',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Transmission Service',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Coolant Flush',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Air Filter Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Fuel Filter Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Pad Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Rotor Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Caliper Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Disc Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Pad Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Rotor Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Caliper Replacement',
+            'status' => 'A'
+        ]);
+
+        VehicleService::create([
+            'name' => 'Brake Pad Replacement',
+            'status' => 'A'
+        ]);
     }
 }
