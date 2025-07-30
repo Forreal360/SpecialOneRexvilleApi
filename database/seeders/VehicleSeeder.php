@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Client;
+use App\Models\VehicleModel as Model;
+use Faker\Factory as Faker;
 
 class VehicleSeeder extends Seeder
 {
@@ -12,69 +15,39 @@ class VehicleSeeder extends Seeder
      */
     public function run(): void
     {
-        $client = \App\Models\Client::first();
-
-        if (!$client) {
-            return;
-        }
-
-        $vehicles = [
-            [
-                'client_id' => $client->id,
-                'year' => 2025,
-                'make_id' => '1',
-                'model_id' => '2',
-                'vin' => '1HGBH41JXMN109186',
-                'buy_date' => '2020-03-15',
-                'insurance' => 'Seguros Bolívar',
-                'image_path' => 'promotions/fHzIN3phMEYFVfRdYqpzXdozn63mlXmOdS3F6adm.png'
-            ],
-            [
-                'client_id' => $client->id,
-                'year' => 2025,
-                'make_id' => '1',
-                'model_id' => '2',
-                'vin' => '2T1BURHE0JC123456',
-                'buy_date' => '2019-07-22',
-                'insurance' => 'Mapfre Seguros',
-                'image_path' => 'promotions/fHzIN3phMEYFVfRdYqpzXdozn63mlXmOdS3F6adm.png'
-            ],
-            [
-                'client_id' => $client->id,
-                'year' => 2025,
-                'make_id' => '1',
-                'model_id' => '2',
-                'vin' => '3VWDX7AJ5DM123456',
-                'buy_date' => '2021-01-10',
-                'insurance' => 'Sura Seguros',
-                'image_path' => 'promotions/fHzIN3phMEYFVfRdYqpzXdozn63mlXmOdS3F6adm.png'
-            ],
-            [
-                'client_id' => $client->id,
-                'year' => 2025,
-                'make_id' => '1',
-                'model_id' => '2',
-                'vin' => '4T1B11HK5JU123456',
-                'buy_date' => '2018-11-05',
-                'insurance' => 'Colpatria Seguros',
-                'image_path' => 'promotions/fHzIN3phMEYFVfRdYqpzXdozn63mlXmOdS3F6adm.png'
-            ],
-            [
-                'client_id' => $client->id,
-                'year' => 2025,
-                'make_id' => '1',
-                'model_id' => '2',
-                'vin' => '5YJSA1E47HF123456',
-                'buy_date' => '2022-05-18',
-                'insurance' => 'Allianz Seguros',
-                'image_path' => 'promotions/fHzIN3phMEYFVfRdYqpzXdozn63mlXmOdS3F6adm.png'
-            ]
+        $faker = Faker::create();
+        $clients = Client::all();
+        $models = Model::where('make_id', 1)->get();
+        $insuranceCompanies = [
+            'Seguros Bolívar',
+            'Mapfre Seguros',
+            'Sura Seguros',
+            'Colpatria Seguros',
+            'Allianz Seguros',
+            'Liberty Seguros',
+            'AXA Seguros'
         ];
 
-        foreach ($vehicles as $vehicleData) {
-            \App\Models\ClientVehicle::create($vehicleData);
-        }
+        foreach ($clients as $client) {
+            // Generar entre 1 y 3 vehículos por cliente
+            $numberOfVehicles = rand(1, 3);
+            
+            for ($i = 0; $i < $numberOfVehicles; $i++) {
+                $randomModel = $models->random();
+                
+                \App\Models\ClientVehicle::create([
+                    'client_id' => $client->id,
+                    'year' => $faker->numberBetween(2015, 2025),
+                    'make_id' => '1',
+                    'model_id' => $randomModel->id,
+                    'vin' => strtoupper($faker->bothify('?##???#?#?#######')),
+                    'buy_date' => $faker->dateTimeBetween('-5 years', 'now')->format('Y-m-d'),
+                    'insurance' => $faker->randomElement($insuranceCompanies),
+                    'image_path' => 'promotions/fHzIN3phMEYFVfRdYqpzXdozn63mlXmOdS3F6adm.png'
+                ]);
+            }
 
-        $this->command->info('Se han creado 5 vehículos para el cliente: ' . $client->name);
+            $this->command->info("Se han creado {$numberOfVehicles} vehículos para el cliente: {$client->name}");
+        }
     }
 }

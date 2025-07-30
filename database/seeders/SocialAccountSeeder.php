@@ -15,7 +15,7 @@ class SocialAccountSeeder extends Seeder
     public function run(): void
     {
         // Obtener algunos clientes existentes
-        $clients = Client::take(3)->get();
+        $clients = Client::take(1)->get();
 
         foreach ($clients as $client) {
             // Crear cuentas sociales de ejemplo
