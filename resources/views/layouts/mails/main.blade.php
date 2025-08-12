@@ -9,7 +9,7 @@
         <tr>
           <td align="center"
             style="background: linear-gradient(135deg, #003468 0%, #0080ff 100%); padding: 32px 20px 20px 20px; border-radius:10px 10px 0 0;">
-            <img src="{{asset('assets/images/logo.png')}}" alt="Hyundai de Rexville" width="100"
+            <img src="{{asset('assets/images/rex-white.png')}}" alt="Hyundai de Rexville" width="100"
               style="max-width:100%; height:auto; margin-bottom:10px;">
 
             <div style="color:#fff; font-size:14px; font-weight:bold; margin-bottom:0px; text-align:center;">
