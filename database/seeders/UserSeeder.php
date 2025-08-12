@@ -14,6 +14,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+
+
         DB::table('clients')->insert([
             'name' => 'Joan',
             'last_name' => 'Milla',
@@ -22,6 +24,35 @@ class UserSeeder extends Seeder
             'phone_code' => '57',
             'phone' => '3001234567',
             'license_number' => 'LIC123456789',
+            'profile_photo' => null,
+            'status' => 'A',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+
+        DB::table('clients')->insert([
+            'name' => 'Romina',
+            'last_name' => 'Romina',
+            'email' => 'romina72@hotmail.com',
+            'password' => Hash::make('12345678'),
+            'phone_code' => '57',
+            'phone' => '3101234567',
+            'license_number' => 'L5C123456789',
+            'profile_photo' => null,
+            'status' => 'A',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('clients')->insert([
+            'name' => 'Johan',
+            'last_name' => 'Quintero',
+            'email' => 'johan@forreal360.com',
+            'password' => Hash::make('12345678'),
+            'phone_code' => '57',
+            'phone' => '3001734567',
+            'license_number' => 'LIC103456789',
             'profile_photo' => null,
             'status' => 'A',
             'created_at' => now(),
