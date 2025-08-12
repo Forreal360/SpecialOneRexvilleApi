@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('appointment_id');
             $table->unsignedBigInteger('service_id');
+            $table->enum('status', ['A', 'I', 'T'])->default('A');
 
             $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');
             $table->foreign('service_id')->references('id')->on('vehicle_services')->onDelete('cascade');
