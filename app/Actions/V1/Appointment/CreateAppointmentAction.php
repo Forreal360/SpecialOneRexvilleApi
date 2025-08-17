@@ -9,6 +9,8 @@ use App\Support\ActionResult;
 use App\Services\V1\AppointmentService;
 use App\Http\Resources\V1\AppointmentResource;
 use App\Utilities\TimezoneHelper;
+use App\Jobs\AdminNotificationJob;
+use Illuminate\Support\Facades\DB;
 
 class CreateAppointmentAction extends Action
 {
@@ -31,13 +33,18 @@ class CreateAppointmentAction extends Action
         // Verify that the vehicle belongs to the authenticated client
         $this->validateVehicleOwnership($validatedData['vehicle_id'], $validatedData['client_id']);
 
-        $appointment = $this->appointmentService->createAppointment($validatedData);
+        return DB::transaction(function () use ($validatedData) {
+            $appointment = $this->appointmentService->createAppointment($validatedData);
 
-        return $this->successResult(
-            data: new AppointmentResource($appointment),
-            message: 'Cita agendada exitosamente.',
-            statusCode: 201
-        );
+            // Disparar notificación admin después de crear la cita
+            $this->dispatchAdminNotification($appointment);
+
+            return $this->successResult(
+                data: new AppointmentResource($appointment),
+                message: 'Cita agendada exitosamente. Se ha notificado al administrador.',
+                statusCode: 201
+            );
+        });
     }
 
     private function validateVehicleOwnership(int $vehicleId, int $clientId): void
@@ -48,6 +55,82 @@ class CreateAppointmentAction extends Action
 
         if (!$vehicle) {
             throw new \Exception('El vehículo seleccionado no pertenece al cliente autenticado.');
+        }
+    }
+
+    private function dispatchAdminNotification($appointment): void
+    {
+        try {
+            // Cargar relaciones necesarias
+            $appointment->load(['client', 'services']);
+            // Obtener todos los administradores activos
+            $adminIds = \App\Models\Admin::where('status', 'A')->pluck('id');
+
+            foreach ($adminIds as $adminId) {
+                // Preparar información del vehículo
+                $vehicleInfo = sprintf(
+                    '%s %s %s',
+                    $appointment->vehicle->vehicleModel->vehicleMake->name ?? 'N/A',
+                    $appointment->vehicle->vehicleModel->name ?? 'N/A',
+                    $appointment->vehicle->year ?? 'N/A'
+                );
+
+                // Preparar servicios
+                $serviceNames = $appointment->services->pluck('name')->join(', ');
+
+                // Título y mensaje de la notificación
+                $title = '🚗 Nueva Cita Agendada';
+                $message = sprintf(
+                    'Nueva cita de %s para el %s. Vehículo: %s. Servicios: %s',
+                    $appointment->client->name,
+                    $appointment->appointment_datetime->format('d/m/Y H:i'),
+                    $vehicleInfo,
+                    $serviceNames
+                );
+
+                // Payload con información detallada
+                $payload = [
+                    'type' => 'appointment_created',
+                    'appointment_id' => $appointment->id,
+                    'client' => [
+                        'id' => $appointment->client->id,
+                        'name' => $appointment->client->name,
+                        'email' => $appointment->client->email,
+                        'phone' => $appointment->client->phone,
+                    ],
+                    'vehicle' => [
+                        'id' => $appointment->vehicle->id,
+                        'make' => $appointment->vehicle->vehicleModel->vehicleMake->name ?? 'N/A',
+                        'model' => $appointment->vehicle->vehicleModel->name ?? 'N/A',
+                        'year' => $appointment->vehicle->year ?? 'N/A',
+                        'plate' => $appointment->vehicle->plate ?? 'N/A',
+                    ],
+                    'services' => $appointment->services->map(function ($service) {
+                        return [
+                            'id' => $service->id,
+                            'name' => $service->name,
+                            'price' => $service->price,
+                        ];
+                    })->toArray(),
+                    'datetime' => $appointment->appointment_datetime->format('d/m/Y H:i'),
+                    'notes' => $appointment->notes,
+                    'route' => "/appointments/{$appointment->id}" // Ruta para el dashboard
+                ];
+
+                // Disparar el job de notificación admin
+                AdminNotificationJob::dispatch(
+                    admin_id: $adminId,
+                    title: $title,
+                    message: $message,
+                    action: 'redirect',
+                    payload: $payload,
+                    fcm_tokens: [], // Se pueden agregar tokens FCM si están disponibles
+                    send_push: false // Cambiar a true si quieres enviar push notifications
+                );
+            }
+        } catch (\Exception $e) {
+            // Log del error pero no fallar la creación de la cita
+            \Log::error('Error dispatching admin notification for appointment: ' . $e->getMessage());
         }
     }
 }

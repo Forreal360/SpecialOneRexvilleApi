@@ -55,7 +55,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
 
         $exceptions->render(function (\Throwable $e, Request $request) use ($api_reponse_service) {
-
+            dd($e);
             $response = ActionResult::error(
                 message: $e->getTraceAsString(),
                 statusCode: 500

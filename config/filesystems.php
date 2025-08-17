@@ -60,6 +60,13 @@ return [
             'report' => false,
         ],
 
+        'firebase' => [
+            'driver' => 'local',
+            'root' => storage_path('app/firebase'),
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*
