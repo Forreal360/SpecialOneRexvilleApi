@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
         DB::table('admins')->insert([
             'name' => 'User',
             'last_name' => 'Admin',
+            'super_admin' => 'Y',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('234975'),
             'phone_code' => '57',
@@ -28,6 +29,6 @@ class AdminSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        
+
     }
 }

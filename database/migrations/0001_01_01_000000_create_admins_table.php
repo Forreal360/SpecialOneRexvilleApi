@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('last_name');
             $table->string('email')->unique();
+            $table->enum('super_admin', ['Y', 'N'])->default('N'); // Super admin flag
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone_code', 5)->nullable(); // Código de país (+1, +57, etc.)
