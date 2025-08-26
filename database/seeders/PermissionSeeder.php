@@ -17,6 +17,32 @@ class PermissionSeeder extends Seeder
     {
         $permissions = [
 
+            // Roles
+            [
+                "name" => "roles.get",
+                "module" => "roles",
+                "action" => "get",
+                "alias" => "get_roles"
+            ],
+            [
+                "name" => "roles.create",
+                "module" => "roles",
+                "action" => "get",
+                "alias" => "get_roles"
+            ],
+            [
+                "name" => "roles.update",
+                "module" => "roles",
+                "action" => "get",
+                "alias" => "get_roles"
+            ],
+            [
+                "name" => "roles.update-status",
+                "module" => "roles",
+                "action" => "update",
+                "alias" => "update_roles_status"
+            ],
+
             // Administrators
             [
                 "name" => "administrators.get",
