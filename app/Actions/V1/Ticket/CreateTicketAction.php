@@ -73,13 +73,8 @@ class CreateTicketAction extends Action
                 $priorityEmoji = $this->getPriorityEmoji($priority);
 
                 // Título y mensaje de la notificación
-                $title = "{$priorityEmoji} Nuevo Ticket de Soporte";
-                $message = sprintf(
-                    'Nuevo ticket de %s: "%s". Prioridad: %s',
-                    $ticket->client->name,
-                    $ticket->subject,
-                    ucfirst($priority)
-                );
+                $title = "Nuevo Ticket de Soporte";
+                $message = "Se recibió un nuevo ticket de soporte: {$ticket->subject}";
 
                 // Preview del mensaje inicial (máximo 100 caracteres)
                 $messagePreview = strlen($initialMessage) > 100 

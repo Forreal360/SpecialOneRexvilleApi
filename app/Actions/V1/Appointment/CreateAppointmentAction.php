@@ -79,42 +79,12 @@ class CreateAppointmentAction extends Action
                 $serviceNames = $appointment->services->pluck('name')->join(', ');
 
                 // Título y mensaje de la notificación
-                $title = '🚗 Nueva Cita Agendada';
-                $message = sprintf(
-                    'Nueva cita de %s para el %s. Vehículo: %s. Servicios: %s',
-                    $appointment->client->name,
-                    $appointment->appointment_datetime->format('d/m/Y H:i'),
-                    $vehicleInfo,
-                    $serviceNames
-                );
+                $title = 'Nueva Cita Agendada';
+                $message = 'Ingresa a la sección de citas para ver los detalles.';
 
                 // Payload con información detallada
                 $payload = [
-                    'type' => 'appointment_created',
-                    'appointment_id' => $appointment->id,
-                    'client' => [
-                        'id' => $appointment->client->id,
-                        'name' => $appointment->client->name,
-                        'email' => $appointment->client->email,
-                        'phone' => $appointment->client->phone,
-                    ],
-                    'vehicle' => [
-                        'id' => $appointment->vehicle->id,
-                        'make' => $appointment->vehicle->vehicleModel->vehicleMake->name ?? 'N/A',
-                        'model' => $appointment->vehicle->vehicleModel->name ?? 'N/A',
-                        'year' => $appointment->vehicle->year ?? 'N/A',
-                        'plate' => $appointment->vehicle->plate ?? 'N/A',
-                    ],
-                    'services' => $appointment->services->map(function ($service) {
-                        return [
-                            'id' => $service->id,
-                            'name' => $service->name,
-                            'price' => $service->price,
-                        ];
-                    })->toArray(),
-                    'datetime' => $appointment->appointment_datetime->format('d/m/Y H:i'),
-                    'notes' => $appointment->notes,
-                    'route' => "/appointments/{$appointment->id}" // Ruta para el dashboard
+                    'route' => "/v1/panel/appointments" // Ruta para el dashboard
                 ];
 
                 // Disparar el job de notificación admin
